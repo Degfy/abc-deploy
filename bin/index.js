@@ -44,7 +44,7 @@ async function main() {
     const publishComment = argv.r.trim();
 
     const tars = new Tars(appName, moduleName, Cookie, BaseUrl);
-    const patchId = await tars.upload(path.resolve(__dirname, filePath), uploadComment);
+    const patchId = await tars.upload(path.resolve(process.cwd(), filePath), uploadComment);
 
     console.log('patchId:', patchId);
 
