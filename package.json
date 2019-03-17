@@ -1,0 +1,36 @@
+{
+    "name": "abc-deploy",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "bin": {
+        "abcDeploy": "./bin/index.js"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "autod": "autod -w"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Degfy/abc-deploy.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/Degfy/abc-deploy/issues"
+    },
+    "homepage": "https://github.com/Degfy/abc-deploy#readme",
+    "dependencies": {
+        "@alicloud/pop-core": "1.7.6",
+        "formstream": "1.1.0",
+        "urllib": "2.33.0",
+        "yargs": "13.2.2",
+        "yargs-parser": "13.0.0"
+    },
+    "devDependencies": {
+        "autod": "^3.0.1"
+    }
+}
