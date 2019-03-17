@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const path = require('path');
 const Tars = require('../lib/tars');
 const LBS = require('../lib/lbs');
