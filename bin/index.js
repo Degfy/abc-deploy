@@ -33,15 +33,14 @@ async function main() {
     const filePath = argv.f.trim(); // 必传
     const uploadComment = argv.r.trim(); // 必传
 
-    const accessKeyId = argv.i.trim();
-    const accessKeySecret = argv.s.trim();
+    const accessKeyId = argv.i && argv.i.trim();
+    const accessKeySecret = argv.s && argv.s.trim();
 
+    const LoadBalancerId = argv.b && argv.b.trim();
+    const ListenerPort = argv.l && argv.l.trim();
 
-    const LoadBalancerId = argv.b.trim();
-    const ListenerPort = argv.l.trim();
-
-    const VServerGroupId = argv.v.trim();
-    const publishComment = argv.r.trim();
+    const VServerGroupId = argv.v && argv.v.trim();
+    const publishComment = argv.r && argv.r.trim();
 
     const tars = new Tars(appName, moduleName, Cookie, BaseUrl);
     const patchId = await tars.upload(path.resolve(process.cwd(), filePath), uploadComment);
