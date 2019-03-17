@@ -4,7 +4,7 @@ const LBS = require('../lib/lbs');
 
 let argv = require('yargs')
     .usage('使用方法: node dep.js ')
-    .demand(['h', 'k', 'a', 'm', 'f', 'c', 'i', 's', 'v', 'r'])
+    .demand(['h', 'k', 'a', 'm', 'f', 'c'])
     .describe('h', '服务地址,格式domain、http://domain、https://domain')
     .describe('k', 'tars鉴权的cookie')
 
@@ -33,44 +33,53 @@ async function main() {
     const filePath = argv.f.trim(); // 必传
     const uploadComment = argv.r.trim(); // 必传
 
-    const accessKeyId = argv.i.trim(); // 必传
-    const accessKeySecret = argv.s.trim(); //必传
+    const accessKeyId = argv.i.trim();
+    const accessKeySecret = argv.s.trim();
 
 
-    const LoadBalancerId = argv.b.trim(); //必传
-    const ListenerPort = argv.l.trim(); // 必传
+    const LoadBalancerId = argv.b.trim();
+    const ListenerPort = argv.l.trim();
 
-    const VServerGroupId = argv.v.trim(); // 必传
-    const publishComment = argv.r.trim(); //必传
+    const VServerGroupId = argv.v.trim();
+    const publishComment = argv.r.trim();
 
     const tars = new Tars(appName, moduleName, Cookie, BaseUrl);
     const patchId = await tars.upload(path.resolve(__dirname, filePath), uploadComment);
 
     console.log('patchId:', patchId);
 
-    const lbs = new LBS(accessKeyId, accessKeySecret);
 
-    await tars.publish(patchId, publishComment, {
-        async keepOn() {
-            if (LoadBalancerId && ListenerPort) {
-                await lbs.turnOnStickySession(LoadBalancerId, ListenerPort);
-            }
-        },
+    let blance
+    if (accessKeyId && accessKeySecret) {
+        const lbs = new LBS(accessKeyId, accessKeySecret);
+        blance = {
+            async keepOn() {
+                if (LoadBalancerId && ListenerPort) {
+                    await lbs.turnOnStickySession(LoadBalancerId, ListenerPort);
+                }
+            },
 
-        async keepOff() {
-            if (LoadBalancerId && ListenerPort) {
-                await lbs.turnOffStickySession(LoadBalancerId, ListenerPort);
-            }
-        },
+            async keepOff() {
+                if (LoadBalancerId && ListenerPort) {
+                    await lbs.turnOffStickySession(LoadBalancerId, ListenerPort);
+                }
+            },
 
-        async remove({ ip, port }) {
-            await lbs.removeMachine(VServerGroupId, ip, port);
-        },
+            async remove({ ip, port }) {
+                if (VServerGroupId) {
+                    await lbs.removeMachine(VServerGroupId, ip, port);
+                }
+            },
 
-        async add({ ip, port }) {
-            await lbs.addMachine(VServerGroupId, ip, port);
-        },
-    });
+            async add({ ip, port }) {
+                if (VServerGroupId) {
+                    await lbs.addMachine(VServerGroupId, ip, port);
+                }
+            },
+        };
+    }
+
+    await tars.publish(patchId, publishComment, blance);
 
     process.exit();
 }
