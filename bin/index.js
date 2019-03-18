@@ -39,7 +39,7 @@ async function main() {
     const accessKeySecret = argv.s && argv.s.trim();
 
     const LoadBalancerId = argv.b && argv.b.trim();
-    const ListenerPort = argv.l && argv.l.trim();
+    const ListenerPort = argv.l;
 
     const VServerGroupId = argv.v && argv.v.trim();
     const publishComment = argv.r && argv.r.trim();
